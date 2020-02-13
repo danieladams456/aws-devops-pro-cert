@@ -60,3 +60,6 @@ _22% of exam_ (largest domain)
 - be able to apply updates in your environment and recover from any issues
 - know each of the deployment strategies, how to implement, and how to troubleshoot any issues
 - remember to test everything
+- answer tips
+  - automation should be involved in the answer
+  - "comes default you don't have to do anything" isn't going to be an answer since the question is trying to test that we know what to do in the situation
