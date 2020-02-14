@@ -8,8 +8,8 @@
   - conditions
   - resources
   - outputs
-- how to use change sets
-- how CF handles updates
+- [how to use change sets](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html)
+- [how CF handles updates](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html)
   - updates with no interruption: cloudwatch metric tweak
   - updates with some interruption: EC2 instance resize
   - replacement: new physical ID, i.e. RDS MySQL to Postgres
@@ -66,6 +66,8 @@
     - `eb deploy`
     - `eb swap`
   - also supports ECS for multi-container Docker environments
+- `.ebextentions` [configuration options](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/ebextensions.html)
+  -
 
 ## OpsWorks
 
