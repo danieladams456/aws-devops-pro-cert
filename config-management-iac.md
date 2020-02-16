@@ -4,55 +4,66 @@
 
 - template sections
   - parameters
+    - pseudo parameters: AWS::AccountId, AWS::Region, AWS::StackId, etc
   - mappings
   - conditions
   - resources
   - outputs
 - [how to use change sets](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html)
+  - when an stack update is run, all change sets are deleted as they are no longer valid
 - [how CF handles updates](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html)
   - updates with no interruption: cloudwatch metric tweak
   - updates with some interruption: EC2 instance resize
   - replacement: new physical ID, i.e. RDS MySQL to Postgres
-- how to use update policies
-  - MaxBatchSize
-  - MinInstancesInService
-  - MinSuccessfulInstancesPresent
-  - PauseTime
-  - KNOW ALL SETTINGS!
-  - WaitOnResourceSignals: wait for required number of success signals
-  - SuspendProcesses: prevents AutoScaling from interfering with the stack update
-- layering with nested stacks
-  - chaining and nesting?
 - DependsOn
   - explicit vs implicit
-  - simple launch
   - WaitCondition/WaitConditionHandle
   - CreationPolicy
     - (part of EC2 and AutoScaling, not a standalone resource)
     - know the difference between WaitCondition and CreationPolicy
 - stack policies
   - protect how and what is updated in a stack
+  - IAM policy format
   - open by default, but if stack policy present then default switches to deny
 - custom resource workflow
-  - token and response
+  - either invokes Lambda or publishes SNS
+  - response token used to put result
 - StackSets
-  - management of duplicate stacks across regions and accounts
+  - management of duplicate stacks across regions and accounts (just now AWS organization wide)
 - helper scripts
-  - `cfn-init`: executes CloudFormation metadata one time, typically called in user data
-  - `cfn-hup`: monitors CloudFormation metadata and applies changes when discovered
-  - `cfn-signal`: provides a completion signal to designate the creation (successful or not) of a CreationPolicy or WaitCondition
-  - `cfn-get-metadata`: view current metadata stored within the CF stack (not much exam coverage)
-- policy types
+  - [`cfn-init`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-init.html): executes CloudFormation metadata one time, typically called in user data
+  - [`cfn-hup`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-hup.html): monitors CloudFormation metadata and applies changes when discovered
+    - `cfn-hup.conf` file lets you specify the refresh interval, default 15 minutes
+    - `hooks.conf` file or `hooks.d` directory lets you trigger local commands when the resource lifecycle hits certain stages
+  - [`cfn-signal`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-signal.html): provides a completion signal to designate the creation (successful or not) of a CreationPolicy or WaitCondition
+  - [`cfn-get-metadata`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-get-metadata.html): view current metadata stored within the CF stack (not much exam coverage)
+- [EC2 initialization metadata](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-init.html)
+  - utilized by `cfn-init` helper script
+  - sections: packages, groups, users, sources, files, commands, and then services
+- **policy types**
   - update policies
     - `AutoScalingRollingUpdate`
     - `AutoScalingReplacingUpdate`
     - others?
-  - stack policies
-  - creation policies
-  - deletion policies
+  - how to use update policies
+    - MaxBatchSize
+    - MinInstancesInService
+    - MinSuccessfulInstancesPresent
+    - PauseTime
+    - KNOW ALL SETTINGS!
+    - WaitOnResourceSignals: wait for required number of success signals
+    - SuspendProcesses: prevents AutoScaling from interfering with the stack update
+    - stack policies
+    - creation policies
+    - deletion policies
 - deploying with CloudFormation
   - deploy with CI/CD pipeline
   - can create pipeline, OpsWorks, or Elastic Beanstalk
+- security
+  - [audit logging with CloudTrail](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-api-logging-cloudtrail.html)
+    - CloudWatch events generic [rule](https://docs.aws.amazon.com/es_es/AmazonCloudWatch/latest/events/Create-CloudWatch-Events-CloudTrail-Rule.html) for API calls via CloudTrail
+    - could potentially be filtered more to get API calls done by the service CloudFormation
+  - CloudFormation by default uses temporary credentials generated off of the user session, but can also be configured to use a [service role](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-servicerole.html) instead
 
 ## Elastic Beanstalk
 
