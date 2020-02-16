@@ -42,6 +42,14 @@
   - `cfn-hup`: monitors CloudFormation metadata and applies changes when discovered
   - `cfn-signal`: provides a completion signal to designate the creation (successful or not) of a CreationPolicy or WaitCondition
   - `cfn-get-metadata`: view current metadata stored within the CF stack (not much exam coverage)
+- policy types
+  - update policies
+    - `AutoScalingRollingUpdate`
+    - `AutoScalingReplacingUpdate`
+    - others?
+  - stack policies
+  - creation policies
+  - deletion policies
 - deploying with CloudFormation
   - deploy with CI/CD pipeline
   - can create pipeline, OpsWorks, or Elastic Beanstalk
@@ -66,8 +74,7 @@
     - `eb deploy`
     - `eb swap`
   - also supports ECS for multi-container Docker environments
-- `.ebextentions` [configuration options](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/ebextensions.html)
-  -
+- ## `.ebextentions` [configuration options](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/ebextensions.html)
 
 ## OpsWorks
 

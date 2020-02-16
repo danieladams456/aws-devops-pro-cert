@@ -66,3 +66,14 @@
       - EC2 manual termination
       - health check failure (different from Standby in this sense and also that it is still receiving traffic)
       - Spot interruptions
+
+## CodeDeploy
+
+[lifecycle events](https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html#appspec-hooks-server): too much to list here, click link!
+
+## Test Hints
+
+- understand AutoScaling lifecycle hooks
+- understand logging architectures
+- know how to use various methods of automation for recovery
+- have experience suspending load balancing and auto scaling processes
