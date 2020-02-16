@@ -15,12 +15,6 @@
   - updates with no interruption: cloudwatch metric tweak
   - updates with some interruption: EC2 instance resize
   - replacement: new physical ID, i.e. RDS MySQL to Postgres
-- DependsOn
-  - explicit vs implicit
-  - WaitCondition/WaitConditionHandle
-  - CreationPolicy
-    - (part of EC2 and AutoScaling, not a standalone resource)
-    - know the difference between WaitCondition and CreationPolicy
 - stack policies
   - protect how and what is updated in a stack
   - IAM policy format
@@ -40,22 +34,6 @@
 - [EC2 initialization metadata](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-init.html)
   - utilized by `cfn-init` helper script
   - sections: packages, groups, users, sources, files, commands, and then services
-- **policy types**
-  - update policies
-    - `AutoScalingRollingUpdate`
-    - `AutoScalingReplacingUpdate`
-    - others?
-  - how to use update policies
-    - MaxBatchSize
-    - MinInstancesInService
-    - MinSuccessfulInstancesPresent
-    - PauseTime
-    - KNOW ALL SETTINGS!
-    - WaitOnResourceSignals: wait for required number of success signals
-    - SuspendProcesses: prevents AutoScaling from interfering with the stack update
-    - stack policies
-    - creation policies
-    - deletion policies
 - deploying with CloudFormation
   - deploy with CI/CD pipeline
   - can create pipeline, OpsWorks, or Elastic Beanstalk
@@ -64,6 +42,42 @@
     - CloudWatch events generic [rule](https://docs.aws.amazon.com/es_es/AmazonCloudWatch/latest/events/Create-CloudWatch-Events-CloudTrail-Rule.html) for API calls via CloudTrail
     - could potentially be filtered more to get API calls done by the service CloudFormation
   - CloudFormation by default uses temporary credentials generated off of the user session, but can also be configured to use a [service role](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-servicerole.html) instead
+
+### CloudFormation Resource Attributes
+
+- [`CreationPolicy`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-creationpolicy.html)
+  - pauses CloudFormation execution until a signal is received
+  - can be used to ensure software is installed on an EC2 instance
+  - use cfn-signal or the SignalResource api
+  - supported resources: EC2, ASG, [CloudFormation WaitCondition](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-waitcondition.html)
+    - > For Amazon EC2 and Auto Scaling resources, we recommend that you use a CreationPolicy attribute instead of wait conditions. Add a CreationPolicy attribute to those resources, and use the cfn-signal helper script to signal when an instance creation process has completed successfully.
+- [`DeletionPolicy`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html)
+  - preserves or (in some cases) backs up a resource when its stack is deleted
+  - `Retain`
+    - stack deletes: works as you would expect
+    - stack updates:
+      - > If a resource is deleted, the DeletionPolicy retains the physical resource but ensures that it's deleted from AWS CloudFormation's scope
+      - > If a resource is updated such that a new physical resource is created to replace the old resource, then the old resource is completely deleted, including from AWS CloudFormation's scope.
+  - `Snapshot`
+    - creates a snapshot for the resource before deleting it
+    - applies to EBS volumes and databases (RDS, ElastiCache, RedShift, Neptune)
+- [`DependsOn`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-dependson.html)
+  - explicit vs implicit
+  - for use with a custom `WaitCondition`
+- [`UpdatePolicy`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-updatepolicy.html)
+  - controls how CloudFormation handles ASG, ElastiCache, ElasticSearch, and Lambda alias
+  - lambda alias change uses CodeDeploy
+  - AutoScaling group options:
+    - `AutoScalingReplacingUpdate`: creates a new ASG, switches the load balancer to point to the new, deletes the old
+    - `AutoScalingRollingUpdate`:specify whether AWS CloudFormation updates instances that are in an Auto Scaling group in batches or all at once
+      - `MaxBatchSize`: max instances at a time
+      - `MinInstancesInService`: ASG instances in service
+      - `MinSuccessfulInstancesPercent`:
+        - > If an instance doesn't send a signal within the time specified in the PauseTime property, AWS CloudFormation assumes that the instance wasn't updated. If you specify this property, you must also enable the WaitOnResourceSignals and PauseTime properties.
+      - `PauseTime`
+        - time CloudFormation waits for software to be installed on EC2 instances in the ASG (default 0 seconds)
+        - if `WaitOnResourceSignals` is set, changes to timeout mode listening for a signal (default 5 minutes)
+      - `SuspendProcesses`: list of AutoScaling processes to suspend during rollout
 
 ## Elastic Beanstalk
 
