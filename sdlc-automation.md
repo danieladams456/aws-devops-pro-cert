@@ -34,6 +34,13 @@ _22% of exam_ (largest domain)
     - OneAtATime
     - HalfAtATime
     - AllAtOnce
+  - [Hooks for ECS](https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html)
+    - `BeforeInstall`: Use to run tasks before the replacement task set is created. One target group is associated with the original task set. If an optional test listener is specified, it is associated with the original task set. A rollback is not possible at this point.
+    - `AfterInstall`: Use to run tasks after the replacement task set is created and one of the target groups is associated with it. If an optional test listener is specified, it is associated with the original task set. The results of a hook function at this lifecycle event can trigger a rollback.
+    - `AfterAllowTestTraffic`: Use to run tasks after the test listener serves traffic to the replacement task set. The results of a hook function at this point can trigger a rollback.
+    - `BeforeAllowTraffic`: Use to run tasks after the second target group is associated with the replacement task set, but before traffic is shifted to the replacement task set. The results of a hook function at this lifecycle event can trigger a rollback.
+    - `AfterAllowTraffic`: Use to run tasks after the second target group serves traffic to the replacement task set. The results of a hook function at this lifecycle event can trigger a rollback.
+  - [Hooks for Lambda](https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html#appspec-hooks-lambda): just `BeforeAllowTraffic` and `AfterAllowTraffic`
 - CodPipeline (tie it all together)
   - orchestration of the Code suite actions and transitions
   - compatible with Continuous Delivery with manual approval step

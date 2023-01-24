@@ -67,9 +67,14 @@
       - health check failure (different from Standby in this sense and also that it is still receiving traffic)
       - Spot interruptions
 
-## CodeDeploy
+## Disaster Recovery
 
-[lifecycle events](https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html#appspec-hooks-server): too much to list here, click link!
+- [RTO categorizations](https://aws.amazon.com/blogs/architecture/disaster-recovery-dr-architecture-on-aws-part-iii-pilot-light-and-warm-standby/)
+  - Backup/restore: hours
+  - Pilot Light: 10s of minutes (within 1 hour)
+    - Data live, services idle
+  - Warm standby: minutes
+  - Multi-site active/active: no downtime, high cost and complexity
 
 ## Test Hints
 

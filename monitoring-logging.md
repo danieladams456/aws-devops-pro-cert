@@ -5,7 +5,7 @@
 - logs, metrics, alarms, events, rules, targets
 - Metrics
   - ELB metrics can be used for scaling besides just host metrics
-    - `SurgeQueueLength`: backend can't process requests as quickly as they are being recieved
+    - `SurgeQueueLength`: backend can't process requests as quickly as they are being received
     - `SpilloverCount`: requests dropped
   - know how to use custom metrics
 - Logs

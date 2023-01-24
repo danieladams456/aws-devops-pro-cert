@@ -100,6 +100,7 @@
     - `eb swap`
   - also supports ECS for multi-container Docker environments
 - ## `.ebextentions` [configuration options](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/ebextensions.html)
+- Deployment package files (commands, container_commands, hooks), [precedence of config options](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/command-options.html#configuration-options-precedence)
 
 ## OpsWorks
 
@@ -107,6 +108,10 @@
 
 - app infrastructure management via either puppet or Chef
 - use layers for each tier (load balancer, app server, database layer)
+- types of instances
+  - 24/7 instances are started manually and run until they are manually stopped.
+  - Time-based instances are automatically started and stopped by AWS OpsWorks Stacks on a user-specified schedule.
+  - Load-based instances are automatically started and stopped by AWS OpsWorks Stacks when they cross a threshold for a user-specified load metric such as CPU or memory utilization.
 - know permissions structure
 - know lifecycle: setup/configure, deploy, undeploy, shutdown (Chef specific?)
 - chef recipes
@@ -125,6 +130,7 @@
 - how to trigger
 - API Gateway
   - host multiple versions/stages
+  - [canary release](https://docs.aws.amazon.com/apigateway/latest/developerguide/canary-release.html)
   - API keys
   - VPC integration
 

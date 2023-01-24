@@ -2,7 +2,7 @@
 
 - IAM
   - role trust policy
-  - user must be given a policy that allows it to assume a role
+  - [Different types of assume role calls](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html)
   - conditions like IP whitelist or MFA required
 - encryption in transit and rest
   - if end-to-end required
@@ -32,6 +32,7 @@
 - AWS Config
   - trigger or time based evaluation of resources
   - maintain history of compliance
+  - [remediation](https://docs.aws.amazon.com/config/latest/developerguide/remediation.html)
 - cost optimization
   - always keep in mind even if question doesn't call it out specifically
   - trusted advisor
